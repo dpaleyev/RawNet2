@@ -170,9 +170,8 @@ class Trainer(BaseTrainer):
                 predictions.extend(batch["preds"].cpu()[:, 0].tolist())
                 labels.extend(batch["labels"].cpu().tolist())
             
-            for metric in self.evaluation_metrics:
-                self.evaluation_metrics.update(metric.name, metric(predictions, labels))
-
+            for metric in self.metrics:
+                self.evaluation_metrics.update(metric.name, metric(np.array(predictions), np.array(labels)))
 
             self.writer.set_step(epoch * self.len_epoch, part)
             self._log_scalars(self.evaluation_metrics)
