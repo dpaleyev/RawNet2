@@ -60,7 +60,7 @@ class Trainer(BaseTrainer):
         """
         Move all necessary tensors to the HPU
         """
-        for tensor_for_gpu in ["label", "audio"]:
+        for tensor_for_gpu in ["labels", "audio"]:
             batch[tensor_for_gpu] = batch[tensor_for_gpu].to(device)
         return batch
 
@@ -111,7 +111,6 @@ class Trainer(BaseTrainer):
                     "learning rate", self.lr_scheduler.get_last_lr()[0]
                 )
                 self._log_predictions(**batch, is_train=True)
-                self._log_spectrogram(batch["spectrogram"])
                 self._log_audio(batch["audio"])
                 self._log_scalars(self.train_metrics)
                 # we don't want to reset train metrics at the start of every epoch
@@ -169,7 +168,7 @@ class Trainer(BaseTrainer):
                     metrics=self.evaluation_metrics,
                 )
                 predictions.extend(batch["preds"].cpu()[:, 0].tolist())
-                labels.extend(batch["label"].cpu().tolist())
+                labels.extend(batch["labels"].cpu().tolist())
             
             for metric in self.evaluation_metrics:
                 self.evaluation_metrics.update(metric.name, metric(predictions, labels))

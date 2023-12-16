@@ -1,0 +1,95 @@
+{
+    "name": "RawNet2",
+    "n_gpu": 1,
+    "preprocessing": {
+        "sr": 16000
+    },
+    "arch": {
+        "type": "RawNet2",
+        "args": {
+            "sinc_channels": [[20, 20], [128, 128]],
+            "sinc_size": 1024,
+            "gru_hidden_size": 1024,
+            "gru_num_layers": 3,
+            "embedding_size": 1024
+        }
+    },
+    "data": {
+        "train": {
+            "batch_size": 32,
+            "num_workers": 8,
+            "datasets": [
+                {
+                    "type": "AVSpoofDataset",
+                    "args": {
+                        "data_dir": "LA",
+                        "slice": "train"
+                    }
+                }
+            ]
+        },
+        "val": {
+            "batch_size": 32,
+            "num_workers": 8,
+            "datasets": [
+                {
+                    "type": "AVSpoofDataset",
+                    "args": {
+                        "data_dir": "LA",
+                        "slice": "eval"
+                    }
+                }
+            ]
+        },
+        "dev": {
+            "batch_size": 32,
+            "num_workers": 8,
+            "datasets": [
+                {
+                    "type": "AVSpoofDataset",
+                    "args": {
+                        "data_dir": "LA",
+                        "slice": "dev"
+                    }
+                }
+            ]
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args": {
+            "lr": 0.0001,
+            "weight_decay": 0.0001
+        }
+    },
+    "lr_scheduler": {
+        "type": "ExponentialLR",
+        "args": {
+            "gamma": 0.99999
+        }
+    },
+    "loss": {
+        "type": "WeightedCELoss",
+        "args": {}
+    },
+    "metrics": [
+        {
+            "type": "EqualErrorRate",
+            "args": {
+                "name": "EER"
+            }
+        }
+    ],
+    "trainer": {
+        "epochs": 30,
+        "save_dir": "saved/",
+        "save_period": 1,
+        "verbosity": 2,
+        "monitor": "off",
+        "early_stop": 100,
+        "visualize": "wandb",
+        "wandb_project": "avspoof",
+        "len_epoch": 1000,
+        "grad_norm_clip": 100
+    }
+}

@@ -3,7 +3,7 @@ import torchaudio
 from torch.utils.data import Dataset
 
 class AVSpoofDataset(Dataset):
-    def __init__(self, data_dir: str, slice: str, limit: int,  max_seq_len: int = 64000, **kwargs):
+    def __init__(self, data_dir: str, slice: str, limit: int = None,  max_seq_len: int = 64000, **kwargs):
         super().__init__()
         self.max_seq_len = max_seq_len
 
