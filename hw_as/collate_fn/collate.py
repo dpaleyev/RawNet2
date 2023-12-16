@@ -6,5 +6,5 @@ def collate_fn(batch: tp.List[dict]):
     lables = torch.LongTensor([item['label'] for item in batch])
     return {
         'audio': audios,
-        'label': lables
+        'labels': lables
     }

@@ -34,6 +34,6 @@ class RawNet2(nn.Module):
         out = out[:, -1, :]
         out = self.linear1(out)
         out = self.linear2(out)
-        return out
+        return {"preds": out}
 
 
