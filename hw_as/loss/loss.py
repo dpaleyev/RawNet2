@@ -7,4 +7,4 @@ class WeightedCELoss(nn.Module):
         self.weights =torch.Tensor(weights)
     
     def forward(self, preds, labels, **kwargs):
-        return nn.CrossEntropyLoss(weight=self.weights)(preds, labels)
+        return nn.CrossEntropyLoss(weight=self.weights.to(preds.device))(preds, labels)
